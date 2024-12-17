@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 
-import com.azul.crs.client.Response;
 import com.example.entity.Account;
 import com.example.entity.Message;
 import com.example.service.*;
@@ -37,9 +36,19 @@ public class SocialMediaController {
     public ResponseEntity registerUser(@RequestBody Account account){
         Account addedAccount = accountService.addAccount(account);
         if(addedAccount == null){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Conflict");
         }else{
             return ResponseEntity.status(200).body(addedAccount);
+        }
+    }
+    @PostMapping("/login")
+    public ResponseEntity loginUser(@RequestBody Account account){
+        Account obtainedAccount = accountService.canLogin(account);
+        System.out.println(obtainedAccount);
+        if(obtainedAccount == null){
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Unauthorized");
+        }else{
+            return ResponseEntity.status(200).body(obtainedAccount);
         }
     }
 }

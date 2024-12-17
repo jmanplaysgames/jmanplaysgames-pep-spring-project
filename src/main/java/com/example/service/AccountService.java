@@ -24,16 +24,30 @@ public class AccountService {
     public AccountService(AccountRepository accountRepository){
         this.accountRepository = accountRepository;
     }
+
     public List<Account> getAllAccounts(){
         return accountRepository.findAll();
     }
 
-    @Transactional
     public Account addAccount(Account currentAccount){
-        if(accountRepository.getById(currentAccount.getAccountId()) != null){
-            return null; // or anything you want to do if record is already exists.
+        if(accountRepository.countByusername(currentAccount.getUsername()) != 0){
+            return null;
         }else{
             return accountRepository.save(currentAccount);
         }
+    }
+    
+    public Account canLogin(Account currentAccount){
+        try{
+            Account account = accountRepository.findByUsernameAndPassword(currentAccount.getUsername(), currentAccount.getPassword());
+            System.out.println(account);
+            if(account.getUsername().equals(currentAccount.getUsername()) && account != null && account.getPassword().equals(currentAccount.getPassword())){
+                return account;
+            }
+        }catch(NullPointerException e){
+            return null;
+        }
+        return null;
+        
     }
 }
