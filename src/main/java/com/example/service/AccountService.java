@@ -25,6 +25,10 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
+    public Account getAccountById(Integer accountId){
+        return accountRepository.getById(accountId);
+    }
+
     public List<Account> getAllAccounts(){
         return accountRepository.findAll();
     }
@@ -40,7 +44,6 @@ public class AccountService {
     public Account canLogin(Account currentAccount){
         try{
             Account account = accountRepository.findByUsernameAndPassword(currentAccount.getUsername(), currentAccount.getPassword());
-            System.out.println(account);
             if(account.getUsername().equals(currentAccount.getUsername()) && account != null && account.getPassword().equals(currentAccount.getPassword())){
                 return account;
             }

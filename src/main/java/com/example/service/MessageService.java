@@ -14,8 +14,6 @@ import java.util.List;
 @Transactional
 public class MessageService {
 
-
-    
     MessageRepository messageRepository;
 
     @Autowired
@@ -24,12 +22,28 @@ public class MessageService {
     }
 
     public Message addMessage(Message message){
-        return messageRepository.save(message);
+        if(message.getMessageText().length() <= 255 && !message.getMessageText().equals("")){
+            return messageRepository.save(message);
+        }
+        return null;
     }
 
     public List<Message> getAllMessages(){
         return messageRepository.findAll();
     }
 
+    public List<Message> getAllMessagesByAccountId(Integer accountId){
+        return messageRepository.findByPostedBy(accountId);
+    }
 
+    public Message getMessageById(Integer messageId){
+        Message obtainedMessage = messageRepository.findById(messageId).get();
+        return obtainedMessage;
+    }
+    public void deleteMessageById(Integer messageId){
+       messageRepository.deleteById(messageId);
+    }
+    public void updateMessageById(Integer messageId, Message message){
+        messageRepository.getById(messageId).setMessageText(message.getMessageText());
+    }
 }
