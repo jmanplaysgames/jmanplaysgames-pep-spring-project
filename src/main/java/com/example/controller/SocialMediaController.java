@@ -77,7 +77,7 @@ public class SocialMediaController {
         return ResponseEntity.status(400).body("Client error"); 
     }
 
-    @GetMapping("/messages/")
+    @GetMapping("/messages")
     public ResponseEntity getAllMessages(){
         return ResponseEntity.status(200).body(messageService.getAllMessages());
     }
